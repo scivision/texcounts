@@ -16,19 +16,19 @@ import paramiko
 import getpass
 
 def main(argv):
-    nargin = len(sys.argv)
+    nargin = len(argv)
     debugon = False #verbose messages to console
     imgExt = '.png'
 
     if not ((nargin==2) or (nargin==5)):
         sys.exit('example: python texwcpost.py diss.tex')
-    texFN = sys.argv[1]
+    texFN = argv[1]
     # nargin=5, user wants upload 
     if (nargin == 5): 
         doUpload = True
-        serverAddress = sys.argv[2]
-        username = sys.argv[3]
-        serverDir = sys.argv[4]
+        serverAddress = argv[2]
+        username = argv[3]
+        serverDir = argv[4]
     else: doUpload = False
 #--- handle filenames ------
     texPath = os.path.dirname(texFN) + '/'
