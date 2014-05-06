@@ -40,17 +40,22 @@ def main(argv):
     if not os.path.isfile(texFN): sys.exit('file does not exist: ' + texFN)
 
 # detect and store detected modification statistics
-    (data,texChanged) = TexModDet(texFN,logFN,debugon)  
+    (data,texChanged) = TexModDet(texFN,texPath,logFN,debugon)  
        
 # plot the results, incorporating earlier logged results
-    plotTexStats(data,logFN,texStem,imgFN,debugon)
+    plotTexStats(data,logFN,texStem,imgFN,debugon,texChanged)
 
 # upload to server
     if doUpload and texChanged:
         uploadSFTP(username,serverAddress,serverDir,imgFN)
 ######### END OF MAIN #######################
-def TexModDet(texFN,logFN,debugon):
-    texModTime = str(os.path.getmtime(texFN))
+def TexModDet(texFN,texPath,logFN,debugon):
+	#usually the main file hasnt been modified. Find the most recently modified .tex in this directory
+    texModTime=[]
+    for findTexFN in os.listdir(texPath):
+        if findTexFN.endswith(".tex"):
+            texModTime.append(os.path.getmtime(texPath+findTexFN))
+    texModTime = max(texModTime)   #take newest
 
 ### use texcount to count words
     sysCall = ['texcount','-dir','-inc','-brief','-total',texFN]
@@ -63,15 +68,15 @@ def TexModDet(texFN,logFN,debugon):
     # specific regex terms for each term sought.
     wordRE = '\d+(?=\+\d+\+\d+)'
     wordREC = re.compile(wordRE)
-    wordc = wordREC.findall(tclin)[0]
+    wordc = np.int(wordREC.findall(tclin)[0])
     #
     tabfigRE = '\d+(?=\/\d+\/\d+\)\ Total)'
     tabfigREC = re.compile(tabfigRE)
-    tabfigc = tabfigREC.findall(tclin)[0]
+    tabfigc = np.int(tabfigREC.findall(tclin)[0])
     #
     eqnRE = '\d+(?=\)\ Total)'
     eqnREC = re.compile(eqnRE)
-    eqnc = eqnREC.findall(tclin)[0]
+    eqnc = np.int(eqnREC.findall(tclin)[0])
     
     # one-line texcount output format
     # Words in text
@@ -84,25 +89,41 @@ def TexModDet(texFN,logFN,debugon):
     
     #load previous data
     data = np.loadtxt(logFN,delimiter=',')
-    if debugon: print(data)
-    
+
+    currNumData = np.array([texModTime,wordc,tabfigc,eqnc])
+    dataChanged = currNumData[1::] != data[-1,1::] #don't directly compare time, float precision issue!
+    mtimeDiff = currNumData[0] - data[-1,0]    
+    mtimeChanged = mtimeDiff < -0.01 #precision limit of strftime
+    texChanged = np.any(dataChanged) or mtimeChanged
+    if debugon: 
+        print(data)
+        print('--------')
+        print(data[-1,:])
+        print(currNumData)
+        print(dataChanged)
+        print(mtimeChanged)
+        print(texChanged)
+        print(mtimeDiff)
 #store line for log
     #has data changed (compare with last log line)
     # note this would fail to detect if number of words deleted and added were equal and the like
     # but to me that's a corner case I don't care about WONTFIX
-    texChanged = (np.array([texModTime,wordc,tabfigc,eqnc]) == data[-1,:])
+    
     
     if texChanged:
-        currLogLine = texModTime + ',' +wordc + ',' + tabfigc + ',' + eqnc + '\n'
+        currLogLine = (str(texModTime) + ',' + str(wordc) + ',' + 
+                       str(tabfigc) + ',' + str(eqnc) + '\n')
         print('writing ' + currLogLine.rstrip() + ' to ' + logFN)
         with open(logFN, "a") as myfile:
             myfile.write(currLogLine)
-    else: #maybe user wants to try uploading again due to mistyped password or server outage
+        data = np.vstack( (data,currNumData) )
+        if debugon: print(data.shape)
+    else: 
         print('no modifications to ' + texFN + ' detected, not appending to log or posting')
     return data,texChanged
 #########################
 
-def plotTexStats(data,logFN,texStem,imgFN,debugon):
+def plotTexStats(data,logFN,texStem,imgFN,debugon,texChanged):
     if not os.path.isfile(logFN): sys.exit('file does not exist: ' + logFN)
    
     #print(data)
@@ -114,8 +135,9 @@ def plotTexStats(data,logFN,texStem,imgFN,debugon):
        daten = dt.fromtimestamp(data[0,0])
        print(texStem + ' lastModTime ' + daten.strftime('%Y-%m-%dT%H:%M:%S'))
     else:  #ndim==2
+       nRows,nCols = data.shape
        daten=[dt.fromtimestamp(ts) for ts in data[:,0]]
-       if debugon: print(daten)
+       #if debugon: print(daten)
        print(texStem + ' first / last mod time ' + daten[0].strftime('%Y-%m-%dT%H:%M:%S') + ' / ' 
                + daten[-1].strftime('%Y-%m-%dT%H:%M:%S'))
     if debugon: print(str(nRows) + ' / ' + str(nCols) + ' row /col of data to process ')
@@ -151,14 +173,15 @@ def plotTexStats(data,logFN,texStem,imgFN,debugon):
     plt.title("Dissertation Progress")
     fig.autofmt_xdate()
     
-    if os.path.isfile(imgFN): #data file already exists
-        imgModTime = dt.fromtimestamp(os.path.getmtime(imgFN)).strftime('%Y-%m-%dT%H-%M-%S')
-        oldFN = imgFN + '-' + imgModTime + '.png'
-        if debugon: print("Moving " + imgFN + " to " + oldFN)
-        shutil.move(imgFN,oldFN )
+    if texChanged:
+        if os.path.isfile(imgFN): #data file already exists
+            imgModTime = dt.fromtimestamp(os.path.getmtime(imgFN)).strftime('%Y-%m-%dT%H-%M-%S')
+            oldFN = imgFN + '-' + imgModTime + '.png'
+            if debugon: print("Moving " + imgFN + " to " + oldFN)
+            shutil.move(imgFN,oldFN )
     
-    if debugon: print('saving updated figure ' + imgFN)
-    plt.savefig(imgFN,bbox_inches='tight')
+        if debugon: print('saving updated figure ' + imgFN)
+        plt.savefig(imgFN,bbox_inches='tight')
     plt.show()
     
 def uploadSFTP(username,serverAddress,serverDir,imgFN):
