@@ -152,10 +152,12 @@ def plotTexStats(data,logFN,texStem,imgFN,debugon,texChanged):
     
     ax1.set_xlabel("Date")
     ax1.set_ylabel('Word Count')
-    ax2.set_ylabel('Equation Count')
+    ax2.set_ylabel('Equation, Figure, Table Count')
     
-    ax1.plot(daten,data[:,1], linestyle='-', marker='o', color='b',label='Words')
-    ax2.plot(daten,data[:,3], linestyle='-', marker='o', color='r',label='Equations')
+    ax1.plot(daten,data[:,1], linestyle='-', marker='.', color='b',label='Words')
+
+    ax2.plot(daten,data[:,3], linestyle='-', marker='.', color='r',label='Equations')
+    ax2.plot(daten,data[:,2], linestyle='-', marker='.', color='g', label='Figures + Tables')
     xLo = data[0,0]-86400 #set lower xlim to be 1 day prior to earliest data (fixes one data point corner case)
     xHi = data[-1,0]+86400 #set lower xlim to be 1 day after earliest data (fixes one data point corner case)
     ax1.set_xlim( dt.fromtimestamp(xLo), dt.fromtimestamp(xHi)) 
@@ -170,7 +172,7 @@ def plotTexStats(data,logFN,texStem,imgFN,debugon,texChanged):
     for tl in ax2.get_yticklabels(): tl.set_color('r')
     
     #ax1.legend()
-    #ax2.legend()
+    ax2.legend(loc=2)
     plt.title("Dissertation Progress")
     fig.autofmt_xdate()
     
