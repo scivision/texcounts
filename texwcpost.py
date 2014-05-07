@@ -35,7 +35,8 @@ def main(argv):
     texStem = os.path.splitext(os.path.basename(texFN))[0]
 
     logFN = texPath + texStem + '.progressLog'
-    imgFN = texPath + texStem + imgExt
+    imgName = texStem + imgExt   
+    imgFN = texPath + imgName
 
     if not os.path.isfile(texFN): sys.exit('file does not exist: ' + texFN)
 
@@ -47,7 +48,7 @@ def main(argv):
 
 # upload to server
     if doUpload and texChanged:
-        uploadSFTP(username,serverAddress,serverDir,imgFN)
+        uploadSFTP(username,serverAddress,serverDir,imgFN,imgName)
 ######### END OF MAIN #######################
 def TexModDet(texFN,texPath,logFN,debugon):
 	#usually the main file hasnt been modified. Find the most recently modified .tex in this directory
@@ -184,9 +185,8 @@ def plotTexStats(data,logFN,texStem,imgFN,debugon,texChanged):
         plt.savefig(imgFN,bbox_inches='tight')
     plt.show()
     
-def uploadSFTP(username,serverAddress,serverDir,imgFN):
+def uploadSFTP(username,serverAddress,serverDir,imgFN,imgName):
     print('Uploading ' + imgFN + ' to ' + serverAddress + ' ' + serverDir)
-    imgName = os.path.basename(imgFN)
      
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
