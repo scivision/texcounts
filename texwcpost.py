@@ -186,7 +186,7 @@ def plotTexStats(data,logFN,texStem,imgFN,debugon,texChanged):
     
 def uploadSFTP(username,serverAddress,serverDir,imgFN):
     print('Uploading ' + imgFN + ' to ' + serverAddress + ' ' + serverDir)
-    imgName = os.path.splitext(os.path.basename(imgFN))[0]
+    imgName = os.path.basename(imgFN)
      
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
