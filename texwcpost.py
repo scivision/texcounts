@@ -119,19 +119,11 @@ def TexModDet(texFN,texPath,logFN,debugon):
     return data,texChanged
 #%%
 def plotTexStats(data,texStem,imgFN,debugon,texChanged):
-    if (data.ndim==1): #this is a corner case
-       nRows=1
-       nCols=len(data)
-       data=np.array(data).reshape(1,nCols) #make (1,nCols) 2D array for plt code reuse
-       daten = dt.fromtimestamp(data[0,0])
-       print(texStem + ' lastModTime ' + daten.strftime('%Y-%m-%dT%H:%M:%S'))
-    else:  #ndim==2
-       nRows,nCols = data.shape
-       daten=[dt.fromtimestamp(ts) for ts in data[:,0]]
-       #if debugon: print(daten)
-       print(texStem + ' first / last mod time ' + daten[0].strftime('%Y-%m-%dT%H:%M:%S') + ' / '
-               + daten[-1].strftime('%Y-%m-%dT%H:%M:%S'))
-    if debugon: print(str(nRows) + ' / ' + str(nCols) + ' row /col of data to process ')
+    daten=[dt.fromtimestamp(ts) for ts in data[:,0]]
+    #if debugon: print(daten)
+    print(texStem + ' first / last mod time ' + daten[0].strftime('%Y-%m-%dT%H:%M:%S') + ' / '
+           + daten[-1].strftime('%Y-%m-%dT%H:%M:%S'))
+
 
     daten=md.date2num(daten)
 
