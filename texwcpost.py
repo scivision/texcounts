@@ -35,7 +35,7 @@ def main(texFN,imgExt,upload,dbglvl):
     (data,texChanged) = TexModDet(texFN,texPath,logFN,dbglvl)
 
 #%% plot the results, incorporating earlier logged results
-    plotTexStats(data,logFN,texStem,imgFN,dbglvl,texChanged)
+    plotTexStats(data,texStem,imgFN,dbglvl,texChanged)
 #%% upload to server
     if texChanged and upload[0] is not None:
         uploadSFTP(upload[0],upload[1],upload[2],imgFN,imgName)
@@ -118,11 +118,7 @@ def TexModDet(texFN,texPath,logFN,debugon):
         print('no modifications to ' + texFN + ' detected, not appending to log or posting')
     return data,texChanged
 #%%
-def plotTexStats(data,logFN,texStem,imgFN,debugon,texChanged):
-    if not isfile(logFN): raise RuntimeError('file does not exist: ' + logFN)
-
-    #print(data)
-
+def plotTexStats(data,texStem,imgFN,debugon,texChanged):
     if (data.ndim==1): #this is a corner case
        nRows=1
        nCols=len(data)
