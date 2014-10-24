@@ -1,3 +1,4 @@
+[![Health](https://landscape.io/github/scienceopen/progress-post/master/landscape.png)](https://landscape.io/github/scienceopen/progress-post/master)
 progress-post
 =============
 
