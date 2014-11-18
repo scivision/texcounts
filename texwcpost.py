@@ -41,7 +41,7 @@ def main(texFN,imgExt,upload,dbglvl):
         uploadSFTP(upload[0],upload[1],upload[2],imgFN,imgName)
 #%%
 def TexModDet(texFN,texPath,logFN,debugon):
-	#usually the main file hasnt been modified. Find the most recently modified .tex in this directory
+    #usually the main file hasnt been modified. Find the most recently modified .tex in this directory
     texModTime=max([getmtime(f) for f in glob(join(texPath,'*.tex'))])
 #%% use texcount to count words
     sysCall = ('texcount','-dir','-inc','-brief','-total',texFN)
@@ -193,7 +193,7 @@ if __name__ == "__main__":
 
     if ar.texfn is None:
         from easygui import fileopenbox
-        fn = fileopenbox('pick text file',default='*.tex')
+        fn = fileopenbox('pick text file',filetypes=['*.tex'])
     else:
         fn = ar.texfn
 
