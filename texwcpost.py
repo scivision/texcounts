@@ -78,7 +78,7 @@ def TexModDet(texFN,texPath,logFN,debugon):
 
     #load previous data
     try:
-        data = np.atleast_2d(np.loadtxt(logFN,delimiter=','))
+        data = np.loadtxt(logFN,delimiter=',')
 
         dataChanged = currNumData[1:] != data[-1,1:] #don't directly compare time, float precision issue!
         mtimeDiff = currNumData[0] - data[-1,0]
@@ -116,7 +116,7 @@ def TexModDet(texFN,texPath,logFN,debugon):
         if debugon: print(data.shape)
     else:
         print('no modifications to',texFN,'detected, not appending to log or posting')
-    return data,texChanged
+    return np.atleast_2d(data),texChanged
 #%%
 def plotTexStats(data,texStem,imgFN,debugon,texChanged):
     daten=[dt.fromtimestamp(ts) for ts in data[:,0]]
@@ -185,10 +185,16 @@ def uploadSFTP(username,serverAddress,serverDir,imgFN,imgName):
 if __name__ == "__main__":
     from argparse import ArgumentParser
     p = ArgumentParser(description='Computes statistics of your Latex document')
-    p.add_argument('texfn',help='filename of master .tex file to analyze',type=str)
+    p.add_argument('texfn',help='filename of master .tex file to analyze',type=str,nargs='?',default=None)
     p.add_argument('-i','--iext',help='extension e.g. .png of images',type=str,default='.png')
     p.add_argument('-d','--debug',help='debug messages',action='store_true')
     p.add_argument('-u','--upload',help='upload result to server with (username serverurl serverdirectory)',nargs=3,type=str,default=(None,None,None))
     ar = p.parse_args()
 
-    main(ar.texfn,ar.iext,ar.upload,ar.debug)
+    if ar.texfn is None:
+        from easygui import fileopenbox
+        fn = fileopenbox('pick text file',default='*.tex')
+    else:
+        fn = ar.texfn
+
+    main(fn,ar.iext,ar.upload,ar.debug)
