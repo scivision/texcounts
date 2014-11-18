@@ -192,7 +192,10 @@ if __name__ == "__main__":
     ar = p.parse_args()
 
     if ar.texfn is None:
-        from easygui import fileopenbox
+        try:
+            from easygui import fileopenbox
+        except ImportError:
+            exit('you must specify a file to work with')
         fn = fileopenbox('pick text file',filetypes=['*.tex'])
     else:
         fn = ar.texfn
