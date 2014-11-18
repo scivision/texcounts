@@ -18,6 +18,7 @@ import subprocess
 import re
 from paramiko import SSHClient, AutoAddPolicy
 import getpass
+#from pdb import set_trace
 
 def main(texFN,imgExt,upload,dbglvl):
     texFN = expanduser(texFN)
@@ -197,6 +198,8 @@ if __name__ == "__main__":
         except ImportError:
             exit('you must specify a file to work with')
         fn = fileopenbox('pick text file',filetypes=['*.tex'])
+        if fn is None:
+            exit('you must specify a file to work with')
     else:
         fn = ar.texfn
 
