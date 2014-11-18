@@ -29,7 +29,7 @@ def main(texFN,imgExt,upload,dbglvl):
     imgName = texStem + imgExt
     imgFN = join(texPath, imgName)
 
-    if not isfile(texFN): raise RuntimeError('file does not exist: ' + texFN)
+    if not isfile(texFN): exit('file does not exist: ' + texFN)
 
 # detect and store detected modification statistics
     (data,texChanged) = TexModDet(texFN,texPath,logFN,dbglvl)
@@ -115,14 +115,14 @@ def TexModDet(texFN,texPath,logFN,debugon):
 
         if debugon: print(data.shape)
     else:
-        print('no modifications to ' + texFN + ' detected, not appending to log or posting')
+        print('no modifications to',texFN,'detected, not appending to log or posting')
     return data,texChanged
 #%%
 def plotTexStats(data,texStem,imgFN,debugon,texChanged):
     daten=[dt.fromtimestamp(ts) for ts in data[:,0]]
     #if debugon: print(daten)
-    print(texStem + ' first / last mod time ' + daten[0].strftime('%Y-%m-%dT%H:%M:%S') + ' / '
-           + daten[-1].strftime('%Y-%m-%dT%H:%M:%S'))
+    print(texStem,'first / last mod time',daten[0].strftime('%Y-%m-%dT%H:%M:%S'),' / ',
+           daten[-1].strftime('%Y-%m-%dT%H:%M:%S'))
 
 
     daten=md.date2num(daten)
