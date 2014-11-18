@@ -10,7 +10,7 @@
 import shutil
 from glob import glob
 from os.path import dirname, splitext, basename,isfile, getmtime,expanduser, join
-import numpy as np
+from numpy import array, loadtxt,vstack,atleast_2d
 from datetime import datetime as dt
 import matplotlib.pyplot as plt
 import matplotlib.dates as md
@@ -64,7 +64,7 @@ def TexModDet(texFN,texPath,logFN,debugon):
     eqnREC = re.compile(eqnRE)
     eqnc = int(eqnREC.findall(tclin)[0])
 
-    currNumData = np.array([texModTime,wordc,tabfigc,eqnc])
+    currNumData = array([texModTime,wordc,tabfigc,eqnc])
     '''
      one-line texcount output format:
      Words in text
@@ -78,7 +78,7 @@ def TexModDet(texFN,texPath,logFN,debugon):
 
     #load previous data
     try:
-        data = np.loadtxt(logFN,delimiter=',')
+        data = loadtxt(logFN,delimiter=',')
 
         dataChanged = currNumData[1:] != data[-1,1:] #don't directly compare time, float precision issue!
         mtimeDiff = currNumData[0] - data[-1,0]
@@ -109,14 +109,14 @@ def TexModDet(texFN,texPath,logFN,debugon):
         with open(logFN, "a") as myfile:
             myfile.write(currLogLine)
         if data is not None:
-            data = np.vstack( (data,currNumData) )
+            data = vstack( (data,currNumData) )
         else: #first time run
             data = currNumData
 
         if debugon: print(data.shape)
     else:
         print('no modifications to',texFN,'detected, not appending to log or posting')
-    return np.atleast_2d(data),texChanged
+    return atleast_2d(data),texChanged
 #%%
 def plotTexStats(data,texStem,imgFN,debugon,texChanged):
     daten=[dt.fromtimestamp(ts) for ts in data[:,0]]
