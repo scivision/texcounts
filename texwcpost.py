@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as md
 import subprocess
 import re
-from paramiko import SSHClient, AutoAddPolicy
+from paramiko import SSHClient
 import getpass
 #from pdb import set_trace
 
@@ -174,8 +174,9 @@ def uploadSFTP(username,serverAddress,serverDir,imgFN,imgName):
     print('Uploading ' + imgFN + ' to ' + serverAddress + ' ' + serverDir)
 
     ssh = SSHClient()
-    ssh.set_missing_host_key_policy(AutoAddPolicy())
-    ssh.load_host_keys(expanduser(join("~", ".ssh", "known_hosts")))
+    #ssh.set_missing_host_key_policy(AutoAddPolicy())
+    #ssh.load_host_keys(expanduser(join("~", ".ssh", "known_hosts")))
+    ssh.load_system_host_keys()
     ssh.connect(serverAddress, username=username,password=getpass.getpass(prompt='password: '))
     sftp = ssh.open_sftp()
     sftp.put(imgFN, serverDir+imgName,confirm=True) #note that destination filename MUST be included!
