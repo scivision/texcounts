@@ -8,7 +8,7 @@ from texcounts import moddet
 from texcounts.plots import plotTexStats
 from texcounts.ssh import uploadSFTP
 
-def main(texfn,imgExt,upload,verbose):
+def main(texfn,upload,verbose):
 #%% detect and store detected modification statistics
     data,texChanged = moddet(texfn,verbose)
 #%% plot the results, incorporating earlier logged results

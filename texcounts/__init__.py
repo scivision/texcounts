@@ -1,6 +1,6 @@
 from pathlib import Path
 from subprocess import check_output
-from numpy import array
+from numpy import atleast_2d,array
 from numpy import loadtxt,vstack,atleast_2d
 
 def getcounts(fn):
@@ -47,15 +47,16 @@ if __name__ == '__main__':
 
     counts = getcounts(p.fn)
 
-def TexModDet(texfn,verbose):
+def moddet(texfn,verbose):
+    texfn = Path(texfn).expanduser()
 
     counts,modtime = getcounts(texfn)
 
-
-    logfn = texfn.with_siffix('.progressLog')
+    logfn = texfn.with_suffix('.progressLog')
     #load previous data
     try:
-        data = loadtxt(logfn,delimiter=',')
+        data = loadtxt(str(logfn),delimiter=',')
+        data = atleast_2d(data)
 
         dataChanged = counts[1:] != data[-1,1:] #don't directly compare time, float precision issue!
         mtimeDiff = counts[0] - data[-1,0]

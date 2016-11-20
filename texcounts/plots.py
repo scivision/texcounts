@@ -1,12 +1,17 @@
+from pathlib import Path
 from datetime import datetime as dt
 import matplotlib.pyplot as plt
 import matplotlib.dates as md
 import shutil
 
-def plotTexStats(data,texStem,imgfn,debugon,texChanged):
+def plotTexStats(data,texfn,debugon,texChanged):
+    texfn = Path(texfn).expanduser()
+
+    imgfn = texfn.with_suffix('.png')
+
     daten=[dt.fromtimestamp(ts) for ts in data[:,0]]
     #if debugon: print(daten)
-    print(texStem,'first / last mod time',daten[0].strftime('%Y-%m-%dT%H:%M:%S'),' / ',
+    print(texfn,'first / last mod time',daten[0].strftime('%Y-%m-%dT%H:%M:%S'),' / ',
            daten[-1].strftime('%Y-%m-%dT%H:%M:%S'))
 
 
