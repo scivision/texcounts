@@ -1,4 +1,6 @@
-[![Health](https://landscape.io/github/scienceopen/progress-post/master/landscape.png)](https://landscape.io/github/scienceopen/progress-post/master)
+.. image:: https://landscape.io/github/scienceopen/progress-post/master/landscape.png
+   :target: https://landscape.io/github/scienceopen/progress-post/master
+
 =============
 progress-post
 =============
