@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 '''
  Michael Hirsch 2014
  Reads a .tex file (say, your PhD dissertation) and plots the counts vs time
@@ -10,11 +10,11 @@ from texcounts.ssh import uploadSFTP
 
 def main(texfn,upload,verbose):
 #%% detect and store detected modification statistics
-    data,texChanged = moddet(texfn,verbose)
+    counts = moddet(texfn,verbose)
 #%% plot the results, incorporating earlier logged results
-    plotTexStats(data,texfn,verbose,texChanged)
+    plotTexStats(counts,texfn,verbose)
 #%% upload to server
-    if texChanged and upload[0] is not None:
+    if counts[0] and upload[0] is not None:
         uploadSFTP(upload[0],upload[1],upload[2],texfn)
 
 

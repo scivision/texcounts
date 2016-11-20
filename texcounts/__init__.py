@@ -29,7 +29,7 @@ def getcounts(fn):
      Number of math displayed
     '''
 
-    return counts,modtime
+    return counts
 
 if __name__ == '__main__':
     """
