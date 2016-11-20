@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 '''
  Michael Hirsch 2014
- http://blogs.bu.edu/mhirsch
- GPL v3+ License
  Reads a .tex file (say, your PhD dissertation) and plots the counts vs time
  TeXcount, then optionally can post that png to an HTML server.
- tested with Python 2.7 and 3.4 on Linux
  '''
 from texcounts import moddet
 from texcounts.plots import plotTexStats
