@@ -14,6 +14,9 @@ EXTRACOST = 125 # dollars per extra pub unit
 
 def AGUpagecount(fn):
 #%% count items
+    """
+    no charge for equations, titles
+    """
     counts = getcounts(fn)
 
     pubunits = (counts[1]/500 +  # one pub unit = 500 words
