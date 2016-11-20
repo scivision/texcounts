@@ -1,8 +1,5 @@
-.. image:: https://landscape.io/github/scienceopen/progress-post/master/landscape.png
-   :target: https://landscape.io/github/scienceopen/progress-post/master
-
 =============
-progress-post
+Latex Counts
 =============
 
 Word, equation, float count of Latex document using texcount, 
@@ -10,14 +7,22 @@ making dual-axis plot with matplotlib, posts to SFTP server for web display.
 
 It finds the included tex files. 
 
+.. contents::
+
 install
 =======
 ::
 
     python setup.py develop
     
-usage
-=====
+Track your thesis progress over time
+====================================
 ::
 
-    python texwcpost.py ~/path/main.tex
+    python TexCount.py ~/path/main.tex
+
+Estimate publication costs for AGU JGR Space Physics
+====================================================
+::
+
+    python AGUcount.py ~/path/main.tex
