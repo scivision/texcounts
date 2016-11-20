@@ -1,7 +1,7 @@
 from pathlib import Path
 from subprocess import check_output
 from numpy import atleast_2d,array
-from numpy import loadtxt,vstack,atleast_2d
+from numpy import loadtxt,vstack
 
 def getcounts(fn):
     fn = Path(fn).expanduser()
