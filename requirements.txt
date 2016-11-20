@@ -1,0 +1,5 @@
+setuptools
+nose
+paramiko
+numpy
+matplotlib
