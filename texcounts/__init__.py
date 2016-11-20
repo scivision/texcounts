@@ -50,9 +50,9 @@ if __name__ == '__main__':
 def moddet(texfn,verbose):
     texfn = Path(texfn).expanduser()
 
-    counts,modtime = getcounts(texfn)
+    counts = getcounts(texfn)
 
-    logfn = texfn.with_suffix('.progressLog')
+    logfn = texfn.with_suffix('.progress.log')
     #load previous data
     try:
         data = loadtxt(str(logfn),delimiter=',')
@@ -82,7 +82,7 @@ def moddet(texfn,verbose):
 
 
     if texChanged:
-        currLogLine = (','.join((str(modtime),str(counts[1]),str(counts[2]),str(counts[3]) + '\n')))
+        currLogLine = (','.join((str(counts[0]),str(counts[1]),str(counts[2]),str(counts[3]) + '\n')))
         print('writing {} to {}'.format(currLogLine.rstrip(), logfn))
 
         with logfn.open("a") as myfile:

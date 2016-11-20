@@ -10,11 +10,11 @@ from texcounts.ssh import uploadSFTP
 
 def main(texfn,upload,verbose):
 #%% detect and store detected modification statistics
-    counts = moddet(texfn,verbose)
+    counts,change = moddet(texfn,verbose)
 #%% plot the results, incorporating earlier logged results
-    plotTexStats(counts,texfn,verbose)
+    plotTexStats(counts,texfn,verbose,change)
 #%% upload to server
-    if counts[0] and upload[0] is not None:
+    if counts[0,0] and upload[0] is not None:
         uploadSFTP(upload[0],upload[1],upload[2],texfn)
 
 
