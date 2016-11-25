@@ -1,4 +1,9 @@
-from pathlib import Path
+try:
+    from pathlib import Path
+    Path().expanduser()
+except (ImportError,AttributeError):
+    from pathlib2 import Path
+#    
 from subprocess import check_output
 from numpy import atleast_2d,array
 from numpy import loadtxt,vstack
@@ -35,9 +40,9 @@ if __name__ == '__main__':
     """
     what is an AGU Publication Unit?
     Each pub unit is equal to either 500 words, one figure, or one table.
-    By “words,” AGU is only counting the abstract, main article, and captions,
+    By "words," AGU is only counting the abstract, main article, and captions,
     not the title, authors, affiliations, or references.
-    The new “length limit” for JGR-Space of 25 pub units (before extra fees kick in)
+    The new "length limit" for JGR-Space of 25 pub units (before extra fees kick in)
     is roughly equal to the old limit of 10 double-column pages.
     """
     from argparse import ArgumentParser

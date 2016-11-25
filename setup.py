@@ -11,5 +11,6 @@ except Exception as e:
 
 setup(name='texcounts',
 	  description='Python wrapper for LOWTRAN7 atmosphere transmission model',
+      install_requires=['pathlib2'],
       packages=['texcounts']
 	  )

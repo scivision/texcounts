@@ -5,7 +5,8 @@ https://liemohnjgrspace.wordpress.com/2014/01/29/agu-has-switched-to-publication
 
 This is not an official count! Check with your AGU editor for an official count estimate.
  '''
-from warnings import warn
+from __future__ import print_function
+from sys import stderr
 from texcounts import getcounts
 
 INCLPUB = 25 # more than this, you're changed overlength fees
@@ -34,7 +35,8 @@ if __name__ == "__main__":
     dollars = (pubunits-INCLPUB)*EXTRACOST + FIRSTCOST
 
     if pubunits>INCLPUB:
-        warn('You are overlength by {:.1f} pub units'.format(pubunits-INCLPUB))
+        # I don't like the extra gibberish put out by warnings.warn
+        print('*** You are overlength by {:.1f} pub units'.format(pubunits-INCLPUB),file=stderr)
 
     print('Pubunits: {:.1f}'.format(pubunits))
     print('tables/figures: {:.0f}'.format(counts[1]))
