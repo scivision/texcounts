@@ -11,8 +11,7 @@ def plotTexStats(data,texfn,debugon,texChanged):
 
     daten=[dt.fromtimestamp(ts) for ts in data[:,0]]
     #if debugon: print(daten)
-    print(texfn,'first / last mod time',daten[0].strftime('%Y-%m-%dT%H:%M:%S'),' / ',
-           daten[-1].strftime('%Y-%m-%dT%H:%M:%S'))
+    print(f"{texfn} first / last mod time {daten[0].strftime('%Y-%m-%dT%H:%M:%S')} / {daten[-1].strftime('%Y-%m-%dT%H:%M:%S')}")
 
 
     daten=md.date2num(daten)
@@ -51,12 +50,12 @@ def plotTexStats(data,texfn,debugon,texChanged):
     if texChanged:
         if imgfn.is_file(): #data file already exists
             imgModTime = dt.fromtimestamp(imgfn.stat().st_mtime).strftime('%Y-%m-%dT%H-%M-%S')
-            oldFN = imgfn + '-' + imgModTime + '.png'
+            oldFN = f'{imgfn}-{imgModTime}.png'
             if debugon:
-                print("Moving {} to {}".format(imgfn, oldFN))
+                print(f"Moving {imgfn} to {oldFN}")
             shutil.move(imgfn,oldFN)
 
         if debugon:
-            print('saving updated figure {}'.format(imgfn))
-        fg.savefig(imgfn,bbox_inches='tight')
+            print(f'saving updated figure {imgfn}')
+        fg.savefig(str(imgfn),bbox_inches='tight')
     plt.show()

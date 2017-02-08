@@ -36,9 +36,9 @@ if __name__ == "__main__":
 
     if pubunits>INCLPUB:
         # I don't like the extra gibberish put out by warnings.warn
-        print('*** You are overlength by {:.1f} pub units'.format(pubunits-INCLPUB),file=stderr)
+        print(f'*** You are overlength by {pubunits-INCLPUB:.1f} pub units',file=stderr)
 
-    print('Pubunits: {:.1f}'.format(pubunits))
-    print('tables/figures: {:.0f}'.format(counts[1]))
-    print('words (incl. captions) {:.0f}'.format(counts[0]))
-    print('equations {:.0f}'.format(counts[2]))
+    print(f'Pubunits: {pubunits:.1f}')
+    print(f'tables/figures: {counts[1]:.0f}')
+    print(f'words (incl. captions) {counts[0]:.0f}')
+    print(f'equations {counts[2]:.0f}')

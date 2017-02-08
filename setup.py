@@ -1,16 +1,21 @@
 #!/usr/bin/env python
 from setuptools import setup #enables develop
-import subprocess
-
 try:
-    subprocess.call(['conda','install','--file','requirements.txt'])
+    import conda.cli
+    conda.cli.main('install','--file','requirements.txt')
 except Exception as e:
-    pass
+    print(e)
+    import pip
+    pip.main(['install','-r','requirements.txt'])
 
 #%% install
 
 setup(name='texcounts',
-	  description='Python wrapper for LOWTRAN7 atmosphere transmission model',
-      install_requires=['pathlib2'],
-      packages=['texcounts']
+	  description='Count pages, figures, and tables for publication page count.',
+	  author='Michael Hirsch, Ph.D.',
+	  url='https://github.com/scienceopen/texcounts',
+	  classifiers=[
+	        'Programming Language :: Python :: 3.6',
+	        ],
+      packages=['texcounts'],
 	  )

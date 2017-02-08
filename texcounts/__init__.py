@@ -1,9 +1,4 @@
-try:
-    from pathlib import Path
-    Path().expanduser()
-except (ImportError,AttributeError):
-    from pathlib2 import Path
-#    
+from pathlib import Path
 from subprocess import check_output
 from numpy import atleast_2d,array
 from numpy import loadtxt,vstack
@@ -88,7 +83,7 @@ def moddet(texfn,verbose):
 
     if texChanged:
         currLogLine = (','.join((str(counts[0]),str(counts[1]),str(counts[2]),str(counts[3]) + '\n')))
-        print('writing {} to {}'.format(currLogLine.rstrip(), logfn))
+        print(f'writing {currLogLine.rstrip()} to {logfn}')
 
         with logfn.open("a") as myfile:
             myfile.write(currLogLine)
@@ -101,5 +96,5 @@ def moddet(texfn,verbose):
         if verbose:
             print(data.shape)
     else:
-        print('no modifications to {} detected, not appending to log or posting'.format(texfn))
+        print(f'no modifications to {texfn} detected, not appending to log or posting')
     return atleast_2d(data),texChanged
