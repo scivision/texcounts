@@ -13,7 +13,7 @@ install
 =======
 ::
 
-    python setup.py develop
+    pip install -e .
     
 Track your thesis progress over time
 ====================================
